@@ -2,7 +2,7 @@ import { NAV } from "@/lib/nav";
 import { requireUser } from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
 
-// Placeholder for modules that are scheduled in later phases of the plan.
+// Shown for sidebar links whose module is not available yet.
 export default async function ModulePlaceholder({ params }: PageProps<"/[...slug]">) {
   const { slug } = await params;
   const href = "/" + slug.join("/");
@@ -13,7 +13,7 @@ export default async function ModulePlaceholder({ params }: PageProps<"/[...slug
   return (
     <div>
       <h1 className="text-xl font-semibold text-brand">{item.label}</h1>
-      <p className="mt-2 text-sm text-muted">This module is scheduled in a later phase of the build.</p>
+      <p className="mt-2 text-sm text-muted">This section is not available yet.</p>
     </div>
   );
 }
