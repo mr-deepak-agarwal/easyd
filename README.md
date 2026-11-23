@@ -129,6 +129,30 @@ Things to know:
 
 Apply `supabase/migrations/20261115000015_profitability.sql`.
 
+## Phase 10: AI features
+
+Switched on by one server-side setting; without it every AI button is disabled and the rest of the app works as before.
+
+Vercel environment variables (never in the browser):
+- `ANTHROPIC_API_KEY` (required to switch AI on), `ANTHROPIC_MODEL` (default `claude-sonnet-5-5`)
+- `AI_MONTHLY_TOKEN_CAP` (whole company, default 2,000,000) and `AI_USER_MONTHLY_TOKEN_CAP` (per person, default 200,000). When a cap is reached the AI says so and stops until the 1st. Usage is logged in `ai_usage` (admin can read it all).
+
+| Feature | Where | Who |
+|---|---|---|
+| Ask EasyD: questions in plain English | `/ask` | Everyone, but only about what they may already see |
+| Draft appraisal comment / remark | Review form and appraisal cycle page | Team leads and admin |
+| Project risk warnings and AI summary | `/projects/risks` | Admin, bd, team leads |
+| Tasks from pasted notes; tidy a time-entry note | `/tasks/from-notes`, time tracker | Everyone |
+
+Safety rules built in:
+- Ask EasyD only uses seven read-only tools, and each runs as the signed-in person through the normal database rules. It cannot change data, and an employee asking for profit figures is refused by the database, not by the AI.
+- Anything coming from the database or from people is passed to the AI as data, with an instruction to ignore instructions inside it.
+- AI only drafts. Appraisal text is put in the box for the person to edit and save. Tasks are created only after the person ticks and confirms them. Ratings, scores, pay and leave are never decided by AI.
+- Risk warnings come from fixed, explainable rules (`src/lib/risk.ts`); AI only words them.
+- Prompts send business data (names, task titles, figures) to the AI provider. Get the client's agreement first.
+
+Apply `20261115000016_ai_usage.sql` and `20261115000017_project_risks.sql`.
+
 ## Run it
 1. Create a Supabase project (region: Mumbai).
 2. Apply the migrations in order (Supabase CLI: `supabase db push`, or paste each file into the SQL editor), then `supabase/seed.sql`.

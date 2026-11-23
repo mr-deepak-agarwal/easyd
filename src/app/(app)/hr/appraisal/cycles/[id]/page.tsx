@@ -11,6 +11,7 @@ import { Select, Textarea } from "@/components/ui/fields";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Badge } from "@/components/ui/badge";
 import { BandBadge } from "../../score-bits";
+import { CycleDraft } from "./cycle-draft";
 import { closeCycle, publishCycle, rateResult } from "../../actions";
 
 const RATINGS = [[5, "5 - Outstanding"], [4, "4 - Exceeds expectations"], [3, "3 - Meets expectations"], [2, "2 - Below expectations"], [1, "1 - Unsatisfactory"]] as const;
@@ -50,7 +51,7 @@ export default async function CyclePage({ params }: PageProps<"/hr/appraisal/cyc
                   <ActionForm action={rateResult.bind(null, r.id, cid)} className="grid gap-2" resetOnSuccess={false}>
                     <Select name="rating" defaultValue={r.final_rating ? String(r.final_rating) : ""} aria-label={`Final rating for ${(r.profiles as { name: string } | null)?.name}`}><option value="">Rate</option>{RATINGS.map(([v, t]) => <option key={v} value={v}>{t}</option>)}</Select>
                     <Textarea name="remark" defaultValue={r.admin_remark ?? ""} rows={2} maxLength={1000} placeholder="Remark for the employee" aria-label="Remark" />
-                    <SubmitButton variant="secondary">Save</SubmitButton>
+                    <div className="flex flex-wrap items-center gap-2"><SubmitButton variant="secondary">Save</SubmitButton><CycleDraft resultId={r.id} /></div>
                   </ActionForm>) : <span className="text-muted">Close the cycle to rate</span>}
               </Td>
               <Td>{r.acknowledged_at ? <><Badge tone="green">Acknowledged</Badge><p className="mt-1 whitespace-pre-line text-muted">{r.employee_comment}</p></> : locked ? <Badge tone="amber">Not yet</Badge> : "-"}</Td>

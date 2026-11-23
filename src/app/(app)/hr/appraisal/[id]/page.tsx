@@ -134,7 +134,7 @@ export default async function ScorecardPage({ params, searchParams }: PageProps<
 
       {canReview && (
         <Card title="Review this person's work">
-          {projects.length ? <ReviewForm action={submitReview.bind(null, id)} projects={projects} /> : <p className="text-sm text-muted">This person is not on any open project, so there is nothing to review yet.</p>}
+          {projects.length ? <ReviewForm action={submitReview.bind(null, id)} projects={projects} profileId={id} /> : <p className="text-sm text-muted">This person is not on any open project, so there is nothing to review yet.</p>}
         </Card>
       )}
     </div>

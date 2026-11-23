@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Field, Input, Select, Textarea } from "@/components/ui/fields";
 import { NON_CHARGEABLE } from "@/lib/time";
 
+import { DraftButton } from "@/components/ai/draft-button";
+import { tidyWork } from "./ai-actions";
+
 export type TimeDefaults = { entry_date: string; kind: "chargeable" | "non"; project_id: string; category: string; work: string; hours: string; minutes: string };
 
 export function TimeFields({ defaults, projects }: { defaults: TimeDefaults; projects: { id: number; label: string; mine?: boolean }[] }) {
@@ -37,7 +40,8 @@ export function TimeFields({ defaults, projects }: { defaults: TimeDefaults; pro
           </Select>
         </Field>
       )}
-      <Field label="Work accomplished" htmlFor="work" className="sm:col-span-4"><Textarea id="work" name="work" defaultValue={defaults.work} maxLength={2000} required /></Field>
+      <Field label="Work accomplished" htmlFor="work" className="sm:col-span-4"><Textarea id="work" name="work" defaultValue={defaults.work} maxLength={2000} required />
+        <div className="mt-1"><DraftButton target="work" label="Tidy my wording with AI" run={(f) => tidyWork(String((f.elements.namedItem("work") as HTMLTextAreaElement | null)?.value ?? ""))} /></div></Field>
       <Field label="Hours" htmlFor="hours"><Input id="hours" name="hours" inputMode="numeric" defaultValue={defaults.hours} /></Field>
       <Field label="Minutes" htmlFor="minutes"><Input id="minutes" name="minutes" inputMode="numeric" defaultValue={defaults.minutes} /></Field>
     </div>

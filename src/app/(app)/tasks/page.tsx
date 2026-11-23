@@ -28,6 +28,7 @@ export default async function TasksPage({ searchParams }: PageProps<"/tasks">) {
   return (
     <div className="space-y-5">
       <PageHeader title="Tasks" description="Tasks you created or are part of, and tasks on your projects">
+        <Link href="/tasks/from-notes" className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background">Tasks from notes (AI)</Link>
         {FILTERS.map(([k, label]) => (
           <Link key={k} href={`/tasks?show=${k}`}
             className={`rounded-md border px-3 py-1.5 text-sm ${k === show ? "border-brand bg-brand text-white" : "border-border bg-white hover:bg-background"}`}>{label}</Link>

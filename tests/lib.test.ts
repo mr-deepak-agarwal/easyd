@@ -273,3 +273,64 @@ describe("profit", () => {
     expect(t.margin).toBe(73);
   });
 });
+
+import { capsFromEnv, capMessage, extractJson, clip } from "../src/lib/ai-core";
+import { assessRisk } from "../src/lib/risk";
+describe("ai-core", () => {
+  it("reads caps with defaults and ignores junk", () => {
+    expect(capsFromEnv({})).toEqual({ monthly: 2_000_000, perUser: 200_000 });
+    expect(capsFromEnv({ AI_MONTHLY_TOKEN_CAP: "500", AI_USER_MONTHLY_TOKEN_CAP: "abc" })).toEqual({ monthly: 500, perUser: 200_000 });
+  });
+  it("blocks at either cap", () => {
+    const c = { monthly: 1000, perUser: 100 };
+    expect(capMessage({ total: 10, mine: 10 }, c)).toBeNull();
+    expect(capMessage({ total: 1000, mine: 0 }, c)).toMatch(/this month/);
+    expect(capMessage({ total: 10, mine: 100 }, c)).toMatch(/your AI allowance/);
+  });
+  it("extracts JSON from fenced, prefixed or trailing-text replies", () => {
+    expect(extractJson('```json\n[{"a":1}]\n```')).toEqual([{ a: 1 }]);
+    expect(extractJson('Here you go: [{"a":1}] hope that helps')).toEqual([{ a: 1 }]);
+    expect(extractJson('{"x":2}')).toEqual({ x: 2 });
+    expect(extractJson("no json at all")).toBeNull();
+  });
+  it("clips long lists", () => {
+    expect(clip([1, 2, 3], 2)).toEqual({ rows: [1, 2], note: "Showing 2 of 3 rows" });
+    expect(clip([1], 2)).toEqual({ rows: [1] });
+  });
+});
+
+describe("risk rules", () => {
+  const base = { project_name: "P", end_date: "2026-12-31", planned_hours: 100, logged_minutes: 600, progress_pct: 20, milestones_open: 3, milestones_overdue: 0, tasks_open: 5, tasks_overdue: 0, last_time_entry: "2026-11-20", top_overdue_person: null, top_overdue_count: 0 };
+  const today = "2026-11-23";
+  it("is quiet for a healthy project", () => { expect(assessRisk(base, today).level).toBeNull(); });
+  it("flags hours used up as high", () => {
+    const a = assessRisk({ ...base, logged_minutes: 6600 }, today);
+    expect(a.level).toBe("high"); expect(a.flags[0].text).toMatch(/Hours used up: 110 of 100/);
+  });
+  it("flags hours ahead of progress as medium", () => {
+    const a = assessRisk({ ...base, logged_minutes: 4200, progress_pct: 30 }, today); // 70% used, 30% done
+    expect(a.level).toBe("medium"); expect(a.flags[0].text).toMatch(/ahead of progress/);
+  });
+  it("flags past end date and near end with low progress", () => {
+    expect(assessRisk({ ...base, end_date: "2026-11-20" }, today).flags[0].text).toBe("Past its end date by 3 days");
+    expect(assessRisk({ ...base, end_date: "2026-11-30", progress_pct: 40 }, today).flags[0].text).toMatch(/Ends in 7 days/);
+    expect(assessRisk({ ...base, end_date: "2026-11-30", progress_pct: 90 }, today).level).toBeNull();
+  });
+  it("grades overdue milestones and tasks, naming the person who holds most", () => {
+    expect(assessRisk({ ...base, milestones_overdue: 1 }, today).level).toBe("medium");
+    expect(assessRisk({ ...base, milestones_overdue: 3 }, today).level).toBe("high");
+    const t = assessRisk({ ...base, tasks_overdue: 4, top_overdue_person: "Ravi", top_overdue_count: 3 }, today);
+    expect(t.flags[0].text).toBe("4 tasks overdue, 3 of them with Ravi");
+    expect(assessRisk({ ...base, tasks_overdue: 1 }, today).level).toBe("low");
+  });
+  it("flags silence but not for projects with nothing open or no plan", () => {
+    expect(assessRisk({ ...base, last_time_entry: "2026-11-01" }, today).flags[0].text).toBe("No time logged for 22 days");
+    expect(assessRisk({ ...base, last_time_entry: null }, today).flags[0].text).toMatch(/No time has been logged/);
+    expect(assessRisk({ ...base, last_time_entry: "2026-11-01", tasks_open: 0, milestones_open: 0 }, today).level).toBeNull();
+    expect(assessRisk({ ...base, planned_hours: 0, last_time_entry: null }, today).level).toBeNull();
+  });
+  it("sorts the worst first", () => {
+    const a = assessRisk({ ...base, tasks_overdue: 1, logged_minutes: 6600 }, today);
+    expect(a.flags.map((f) => f.level)).toEqual(["high", "low"]);
+  });
+});
