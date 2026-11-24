@@ -33,7 +33,7 @@ export default async function LeavePage() {
       <div className="grid gap-4 sm:grid-cols-2">
         {([["Casual leave (CL)", quota?.casual, takenIn("CL")], ["Privilege leave (PL)", quota?.privilege, takenIn("PL")]] as const).map(([label, q, taken]) => (
           <Card key={label}>
-            <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
+            <div className="text-xs text-muted">{label}</div>
             <div className="mt-1 text-2xl font-semibold text-brand">{q ?? 0}</div>
             <div className="text-xs text-muted">quota - {taken} approved so far in {year}</div>
           </Card>
@@ -56,7 +56,7 @@ export default async function LeavePage() {
       </Card>
 
       <div>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">My applications</h2>
+        <h2 className="mb-2 text-base font-semibold">My applications</h2>
         <Table>
           <thead><tr><Th>From</Th><Th>To</Th><Th>Days</Th><Th>Type</Th><Th>Reason</Th><Th>Applied</Th><Th>Status</Th></tr></thead>
           <tbody>

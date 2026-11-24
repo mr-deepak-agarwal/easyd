@@ -39,7 +39,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/hr/payro
             <Select name="emp" defaultValue={emp} aria-label="Employee for suggestion"><option value="">Employee</option>{people?.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</Select>
             <Select name="month" defaultValue={String(month)} aria-label="Month">{MONTH_NAMES.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}</Select>
             <Input name="year" defaultValue={String(year)} aria-label="Year" inputMode="numeric" />
-            <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Suggest salary</button>
+            <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Suggest salary</button>
           </form>
           {emp && <p className="mb-4 text-sm text-muted" role="note">{suggestion.data != null ? <>Suggested for {MONTH_NAMES[month - 1]} {year}: <b className="text-foreground">{inr(Number(suggestion.data))}</b> (salary less a day-rate deduction for each day without attendance)</> : "No suggestion: the person logged no time that month, or has no salary on file."}</p>}
           <ActionForm action={addSalary} className="grid gap-4 sm:grid-cols-4" key={`${emp}-${year}-${month}`}>

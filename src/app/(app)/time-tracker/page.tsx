@@ -48,7 +48,7 @@ export default async function TimeTrackerPage({ searchParams }: PageProps<"/time
   return (
     <div className="space-y-5">
       <PageHeader title="Time Tracker" description="Log what you worked on each day">
-        <Link href="/time-tracker/approvals" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">{user.role === "admin" ? "Approve edited entries" : "My edit requests"}</Link>
+        <Link href="/time-tracker/approvals" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">{user.role === "admin" ? "Approve edited entries" : "My edit requests"}</Link>
       </PageHeader>
       <Card title="Add time">
         <ActionForm action={addEntry} className="space-y-4">
@@ -64,7 +64,7 @@ export default async function TimeTrackerPage({ searchParams }: PageProps<"/time
             {people?.map((p) => <option key={p.id} value={p.id}>{p.id === user.id ? `${p.name} (me)` : p.name}</option>)}
           </Select>
         )}
-        <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Show</button>
+        <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Show</button>
         <span className="ml-auto text-sm text-muted">Total <b className="text-foreground">{formatMinutes(total)}</b> · chargeable {formatMinutes(chargeable)}</span>
       </form>
       <Table>

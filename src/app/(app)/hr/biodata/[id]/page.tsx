@@ -67,7 +67,7 @@ export default async function EmployeeDetailPage({ params }: PageProps<"/hr/biod
               ["Contact", e.contact], ["Date of birth", e.dob ? formatDate(e.dob) : null], ["Joined", e.join_date ? formatDate(e.join_date) : null],
               ["Address", e.address], ["Bank details", e.bank],
             ] as [string, string | null][]).map(([k, v]) => (
-              <div key={k}><dt className="text-xs uppercase tracking-wide text-muted">{k}</dt><dd className="mt-0.5 whitespace-pre-line">{v || "-"}</dd></div>
+              <div key={k}><dt className="text-xs text-muted">{k}</dt><dd className="mt-0.5 whitespace-pre-line">{v || "-"}</dd></div>
             ))}
           </dl>
         </Card>

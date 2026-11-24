@@ -70,7 +70,7 @@ export function InvoiceForm({ action, defaults, sacs, lockedNumber }: {
       </div>
 
       <section className="rounded-xl border border-border bg-card p-5">
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Services</h2>
+        <h2 className="mb-3 text-base font-semibold">Services</h2>
         <datalist id="sac-list">{sacs.map((s) => <option key={s.sac} value={s.sac}>{s.description}</option>)}</datalist>
         <div className="space-y-3">
           {keys.map((k, i) => {
@@ -102,7 +102,7 @@ function Party({ prefix, title, d, exp }: { prefix: "recipient" | "delivery"; ti
   const v = (f: string) => (d as unknown as Record<string, string>)[`${prefix}_${f}`] ?? "";
   return (
     <section className="grid gap-3 rounded-xl border border-border bg-card p-5 sm:grid-cols-2">
-      <h2 className="col-span-full text-sm font-semibold uppercase tracking-wide text-muted">{title}</h2>
+      <h2 className="col-span-full text-base font-semibold">{title}</h2>
       <Field label="Name" htmlFor={`${prefix}_name`} className="col-span-full"><Input id={`${prefix}_name`} name={`${prefix}_name`} defaultValue={v("name")} maxLength={200} required={prefix === "recipient"} /></Field>
       <Field label="Address" htmlFor={`${prefix}_address`} className="col-span-full"><Textarea id={`${prefix}_address`} name={`${prefix}_address`} defaultValue={v("address")} maxLength={500} /></Field>
       <Field label="PAN" htmlFor={`${prefix}_pan`}><Input id={`${prefix}_pan`} name={`${prefix}_pan`} defaultValue={v("pan")} maxLength={20} /></Field>

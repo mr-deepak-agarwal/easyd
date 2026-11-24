@@ -46,7 +46,7 @@ export default async function LibraryPage({ searchParams }: PageProps<"/library"
         <Input name="q" defaultValue={q} placeholder="Search description or invoice number" aria-label="Search" />
         <Select name="project" defaultValue={Number.isInteger(project) && project > 0 ? String(project) : ""} aria-label="Project"><option value="">All projects</option>{projects?.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select>
         <Select name="category" defaultValue={category} aria-label="Department"><option value="">All departments</option>{categories.map((c) => <option key={c}>{c}</option>)}</Select>
-        <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Filter</button>
+        <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Filter</button>
       </form>
       <Table>
         <thead><tr><Th>Client</Th><Th>Project</Th><Th>Department</Th><Th>Type</Th><Th>Description</Th><Th>Added</Th><Th /></tr></thead>
@@ -64,7 +64,7 @@ export default async function LibraryPage({ searchParams }: PageProps<"/library"
       </Table>
       {INVOICE_VIEWERS.includes(user.role) && (
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Invoices</h2>
+          <h2 className="text-base font-semibold">Invoices</h2>
           <Table>
             <thead><tr><Th>Client</Th><Th>Project</Th><Th>Invoice no.</Th><Th>Date</Th></tr></thead>
             <tbody>

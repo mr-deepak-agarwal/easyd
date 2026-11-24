@@ -64,7 +64,7 @@ export default async function TaskPage({ params }: PageProps<"/tasks/[id]">) {
       </Card>
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Comments</h2>
+        <h2 className="mb-2 text-base font-semibold">Comments</h2>
         <Card>
           <ActionForm action={addComment.bind(null, taskId)} className="grid gap-3">
             <Field label="Add a comment" htmlFor="comment"><Textarea id="comment" name="comment" required maxLength={2000} /></Field>

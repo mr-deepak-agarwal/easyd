@@ -20,7 +20,7 @@ export default async function ApprovalsPage() {
   return (
     <div className="space-y-5">
       <PageHeader title={isAdmin ? "Approve edited entries" : "My edit requests"} description="Changes to a logged entry apply only after an admin approves them">
-        <Link href="/time-tracker" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">Back to time tracker</Link>
+        <Link href="/time-tracker" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">Back to time tracker</Link>
         {isAdmin && !!edits?.length && <ActionForm action={approveAll} resetOnSuccess={false}><SubmitButton confirm="Approve every pending edit?">Approve all</SubmitButton></ActionForm>}
       </PageHeader>
       <Table>

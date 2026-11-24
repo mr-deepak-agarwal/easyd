@@ -17,7 +17,7 @@ export default async function CyclesPage() {
   return (
     <div className="space-y-5">
       <PageHeader title="Appraisal cycles" description="Freeze scores for a period, rate each employee, publish">
-        <Link href="/hr/appraisal" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">Live scores</Link>
+        <Link href="/hr/appraisal" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">Live scores</Link>
       </PageHeader>
       <Card title="Start a cycle">
         <ActionForm action={createCycle} className="grid gap-4 sm:grid-cols-[1fr_170px_170px_auto] sm:items-end">

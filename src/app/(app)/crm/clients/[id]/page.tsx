@@ -62,7 +62,7 @@ export default async function ClientPage({ params }: PageProps<"/crm/clients/[id
       </Card>
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Contacts</h2>
+        <h2 className="mb-2 text-base font-semibold">Contacts</h2>
         <Table>
           <thead><tr><Th>Name</Th><Th>Designation</Th><Th>Email</Th><Th>Phone</Th><Th /></tr></thead>
           <tbody>
@@ -87,7 +87,7 @@ export default async function ClientPage({ params }: PageProps<"/crm/clients/[id
       </section>
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Leads</h2>
+        <h2 className="mb-2 text-base font-semibold">Leads</h2>
         <Table>
           <thead><tr><Th>Lead</Th><Th>Service</Th><Th>Entered</Th><Th>Status</Th></tr></thead>
           <tbody>
@@ -110,7 +110,7 @@ export default async function ClientPage({ params }: PageProps<"/crm/clients/[id
       </section>
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Follow-ups</h2>
+        <h2 className="mb-2 text-base font-semibold">Follow-ups</h2>
         <FollowupList rows={(followups ?? []) as unknown as FollowupRow[]} />
         <details className="mt-2 rounded-xl border border-border bg-card p-4">
           <summary className="cursor-pointer text-sm font-medium text-brand">Add a follow-up</summary>

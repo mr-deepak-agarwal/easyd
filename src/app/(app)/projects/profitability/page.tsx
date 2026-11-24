@@ -34,7 +34,7 @@ export default async function ProfitabilityPage({ searchParams }: PageProps<"/pr
         <Input name="q" defaultValue={one(sp.q)} placeholder="Search project or client" aria-label="Search" className="w-64" />
         <Input type="date" name="from" defaultValue={from ?? ""} aria-label="From" className="w-40" />
         <Input type="date" name="to" defaultValue={to ?? ""} aria-label="To" className="w-40" />
-        <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Show</button>
+        <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Show</button>
         {(from || to || q) && <Link href="/projects/profitability" className="px-2 py-2 text-sm text-muted hover:underline">Clear</Link>}
       </form>
       {error && <p role="alert" className="text-sm text-danger">Could not load the report.</p>}

@@ -22,7 +22,7 @@ export default async function WeightsPage() {
   return (
     <div className="space-y-5">
       <PageHeader title="Score weights" description="How much each part counts towards the overall score">
-        <Link href="/hr/appraisal" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">Back to appraisal</Link>
+        <Link href="/hr/appraisal" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">Back to appraisal</Link>
       </PageHeader>
       <Card>
         <ActionForm action={saveWeights} className="space-y-4" resetOnSuccess={false}>

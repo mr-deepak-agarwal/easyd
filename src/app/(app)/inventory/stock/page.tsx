@@ -21,7 +21,7 @@ export default async function StockPage({ searchParams }: PageProps<"/inventory/
     history ? supabase.from("stock_consumption").select("id, item, category, quantity, consumed_at").order("id", { ascending: false }).limit(300) : Promise.resolve({ data: null }),
   ]);
   const tab = (label: string, href: string, on: boolean) => (
-    <Link href={href} className={`rounded-md border px-3 py-1.5 text-sm ${on ? "border-brand bg-brand text-white" : "border-border bg-white hover:bg-background"}`}>{label}</Link>
+    <Link href={href} className={`rounded-md border px-3 py-1.5 text-sm ${on ? "border-brand bg-brand text-white" : "border-border bg-card hover:bg-raised"}`}>{label}</Link>
   );
 
   return (

@@ -93,7 +93,7 @@ export default async function LeadPage({ params }: PageProps<"/crm/leads/[id]">)
 
       <section>
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Costing</h2>
+          <h2 className="text-base font-semibold">Costing</h2>
           {COSTING_ROLES.includes(user.role) && pending && (
             <Link href={`/projects/cost-analysis?lead=${leadId}`} className="text-sm text-brand hover:underline">Open cost analysis</Link>
           )}
@@ -114,7 +114,7 @@ export default async function LeadPage({ params }: PageProps<"/crm/leads/[id]">)
       </section>
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Follow-ups</h2>
+        <h2 className="mb-2 text-base font-semibold">Follow-ups</h2>
         <FollowupList rows={(followups ?? []) as unknown as FollowupRow[]} />
         {lead.client_id && (
           <details className="mt-2 rounded-xl border border-border bg-card p-4">

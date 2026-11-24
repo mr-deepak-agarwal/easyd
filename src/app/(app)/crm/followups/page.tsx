@@ -18,11 +18,11 @@ export default async function FollowupsPage() {
     <div className="space-y-6">
       <PageHeader title="Follow-ups" description="Add follow-ups from a client or lead page" />
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Due today or overdue</h2>
+        <h2 className="mb-2 text-base font-semibold">Due today or overdue</h2>
         <FollowupList rows={(due ?? []) as FollowupRow[]} showClient />
       </section>
       <section>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Most recent</h2>
+        <h2 className="mb-2 text-base font-semibold">Most recent</h2>
         <FollowupList rows={(recent ?? []) as FollowupRow[]} showClient />
       </section>
     </div>

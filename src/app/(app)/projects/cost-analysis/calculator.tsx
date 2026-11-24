@@ -50,7 +50,7 @@ export function Calculator({ grades, overheadRate, target }: { grades: Grade[]; 
       <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="bg-background text-xs uppercase tracking-wide text-muted">
+            <tr className="bg-raised text-xs text-muted">
               <th className="px-3 py-2">Grade</th><th className="px-3 py-2">People</th><th className="px-3 py-2">Hours / person / day</th>
               <th className="px-3 py-2">Days</th><th className="px-3 py-2 text-right">Hours</th><th className="px-3 py-2 text-right">Cost</th><th />
             </tr>
@@ -91,7 +91,7 @@ export function Calculator({ grades, overheadRate, target }: { grades: Grade[]; 
           <div className="flex gap-2">
             {FACTOR_PRESETS.map((f) => (
               <button type="button" key={f} onClick={() => setFactor(String(f))}
-                className={`rounded-md border px-3 py-2 text-sm ${num(factor) === f ? "border-brand bg-brand text-white" : "border-border bg-white"}`}>x{f}</button>
+                className={`rounded-md border px-3 py-2 text-sm ${num(factor) === f ? "border-brand bg-brand text-white" : "border-border bg-card"}`}>x{f}</button>
             ))}
             <Input id="factor" type="number" min={0.1} step={0.1} value={factor} onChange={(e) => setFactor(e.target.value)} className="w-24" />
           </div>

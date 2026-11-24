@@ -1,53 +1,124 @@
 @import "tailwindcss";
 
-/* Easy D palette: MARC green on a cool, quiet canvas with a deep green-black sidebar. */
+/* Easy D theme. Light is "mist" with the MARC green rail; dark is deep pine slate (not black). */
 :root {
-  --background: #f3f5f4;
+  --background: #f0f4f1;
   --foreground: #16211b;
   --card: #ffffff;
-  --border: #e3e8e5;
-  --muted: #6a7870;
-  --brand: #00510f;        /* MARC dark green */
-  --brand-soft: #e0efe2;
-  --accent: #2cc36b;       /* MARC bright green */
+  --raised: #f5f8f6;
+  --border: #dfe6e1;
+  --muted: #62756a;
+  --brand: #00510f;         /* MARC dark green: fills and links */
+  --brand-text: #00510f;
+  --brand-soft: #dcebdd;
+  --accent: #1fa65a;
   --danger: #b42318;
-  --sidebar: #0d1a12;
-  --sidebar-text: #aebbb3;
+  --danger-soft: #fde8e6;
+  --warn: #8a5a00;
+  --warn-soft: #fdf0cf;
+  --info: #1d4f91;
+  --info-soft: #e0ecfb;
+  --violet: #5b3a9a;
+  --violet-soft: #ece5fa;
+  --rail: #00510f;
+  --rail-hover: #0a6a1d;
+  --rail-fg: #ffffff;
+  --shadow: 0 1px 2px rgb(16 40 26 / 0.06), 0 4px 14px rgb(16 40 26 / 0.05);
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --background: #0c1310;
+  --foreground: #e4ede7;
+  --card: #131c17;
+  --raised: #1a2620;
+  --border: #243229;
+  --muted: #8aa096;
+  --brand: #1d8f50;         /* fills, with white text */
+  --brand-text: #6ee7a3;    /* links and headings */
+  --brand-soft: #173626;
+  --accent: #34d27b;
+  --danger: #ff7b6f;
+  --danger-soft: #3a1a18;
+  --warn: #f3c25b;
+  --warn-soft: #3a2d10;
+  --info: #84b6f5;
+  --info-soft: #162a44;
+  --violet: #b9a0f2;
+  --violet-soft: #2a2144;
+  --rail: #08100c;
+  --rail-hover: #14221b;
+  --rail-fg: #e4ede7;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 18px rgb(0 0 0 / 0.25);
+  color-scheme: dark;
+}
+
+/* Paper is always light, whatever theme is on screen. */
+@media print {
+  [data-theme="dark"] {
+  --background: #f0f4f1;
+  --foreground: #16211b;
+  --card: #ffffff;
+  --raised: #f5f8f6;
+  --border: #dfe6e1;
+  --muted: #62756a;
+  --brand: #00510f;         /* MARC dark green: fills and links */
+  --brand-text: #00510f;
+  --brand-soft: #dcebdd;
+  --accent: #1fa65a;
+  --danger: #b42318;
+  --danger-soft: #fde8e6;
+  --warn: #8a5a00;
+  --warn-soft: #fdf0cf;
+  --info: #1d4f91;
+  --info-soft: #e0ecfb;
+  --violet: #5b3a9a;
+  --violet-soft: #ece5fa;
+  --rail: #00510f;
+  --rail-hover: #0a6a1d;
+  --rail-fg: #ffffff;
+  --shadow: 0 1px 2px rgb(16 40 26 / 0.06), 0 4px 14px rgb(16 40 26 / 0.05);
+  color-scheme: light;
+}
+  body { background: #fff; }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
+  --color-raised: var(--raised);
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-brand: var(--brand);
   --color-brand-soft: var(--brand-soft);
   --color-accent: var(--accent);
   --color-danger: var(--danger);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-text: var(--sidebar-text);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-rail: var(--rail);
   --font-sans: var(--font-poppins), system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-}
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
 
-::selection { background: var(--brand-soft); }
+/* Brand-coloured text and borders use a lighter green in dark mode so they stay readable. */
+.text-brand, .hover\:text-brand:hover { color: var(--brand-text); }
+.border-brand, .focus\:border-brand:focus { border-color: var(--brand-text); }
+/* Text that sits on a brand fill stays white in both themes. */
+.bg-brand.text-white { color: #fff; }
 
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
+/* One consistent keyboard focus ring. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-text) 22%, transparent); }
+.palette-input:focus { box-shadow: none; }
+input[type="date"], input[type="month"] { color-scheme: inherit; }
 
-/* Slim scrollbars so the sidebar and tables feel like an app, not a web page. */
-* { scrollbar-width: thin; scrollbar-color: #c5cec9 transparent; }
-aside * { scrollbar-color: #2a3a30 transparent; }
+/* Thin scrollbars that suit both themes. */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--muted) 40%, transparent) transparent; }
 
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

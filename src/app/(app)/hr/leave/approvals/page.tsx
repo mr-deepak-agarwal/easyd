@@ -28,7 +28,7 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/hr/lea
       <PageHeader title="Leave approvals" description="Tick applications, then approve or reject them together">
         {STATUSES.map((s) => (
           <Link key={s} href={`/hr/leave/approvals?status=${s}`}
-            className={`rounded-md border px-3 py-1.5 text-sm capitalize ${s === status ? "border-brand bg-brand text-white" : "border-border bg-white hover:bg-background"}`}>{s}</Link>
+            className={`rounded-md border px-3 py-1.5 text-sm capitalize ${s === status ? "border-brand bg-brand text-white" : "border-border bg-card hover:bg-raised"}`}>{s}</Link>
         ))}
       </PageHeader>
 

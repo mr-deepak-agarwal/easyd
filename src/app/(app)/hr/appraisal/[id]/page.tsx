@@ -53,18 +53,18 @@ export default async function ScorecardPage({ params, searchParams }: PageProps<
   return (
     <div className="space-y-5">
       <PageHeader title={person.name} description={`Performance, ${formatDate(from)} to ${formatDate(to)}`}>
-        {isViewer && <Link href="/hr/appraisal" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">All employees</Link>}
+        {isViewer && <Link href="/hr/appraisal" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">All employees</Link>}
       </PageHeader>
       <form className="flex flex-wrap items-end gap-2">
         <Input type="date" name="from" defaultValue={from} aria-label="From" className="w-40" />
         <Input type="date" name="to" defaultValue={to} aria-label="To" className="w-40" />
-        <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Show</button>
+        <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Show</button>
       </form>
 
       <Card>
         <div className="flex flex-wrap items-center gap-6">
           <div>
-            <p className="text-xs uppercase tracking-wide text-muted">Overall score</p>
+            <p className="text-xs text-muted">Overall score</p>
             <p className="text-4xl font-semibold tabular-nums" aria-label="Overall score">{result.total ?? "-"}<span className="text-lg text-muted"> / 100</span></p>
           </div>
           <BandBadge band={result.band} />
@@ -83,7 +83,7 @@ export default async function ScorecardPage({ params, searchParams }: PageProps<
       <p className="text-sm text-muted">Other time: {formatMinutes(Number(raw.nonchargeable_minutes))} non chargeable. {raw.idle_projects > 0 ? `${raw.idle_projects} assigned project${raw.idle_projects === 1 ? " has" : "s have"} no time logged in this period.` : ""}</p>
 
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Late right now</h2>
+        <h2 className="text-base font-semibold">Late right now</h2>
         <Table>
           <thead><tr><Th>Type</Th><Th>Item</Th><Th>Project</Th><Th>Was due</Th></tr></thead>
           <tbody>{overdue?.length ? overdue.map((o, i) => <tr key={i}><Td>{o.kind}</Td><Td>{o.title}</Td><Td>{o.project_name ?? "-"}</Td><Td className="text-danger">{formatDate(o.due)}</Td></tr>) : <EmptyRow cols={4} text="Nothing is overdue" />}</tbody>
@@ -91,7 +91,7 @@ export default async function ScorecardPage({ params, searchParams }: PageProps<
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Team lead reviews</h2>
+        <h2 className="text-base font-semibold">Team lead reviews</h2>
         <Table>
           <thead><tr><Th>Month</Th><Th>Project</Th><Th>By</Th><Th>Follow-up</Th><Th>Ownership</Th><Th>Accuracy</Th><Th>Enthusiasm</Th><Th>Detail</Th><Th>Comments</Th></tr></thead>
           <tbody>
@@ -106,7 +106,7 @@ export default async function ScorecardPage({ params, searchParams }: PageProps<
 
       {!!results?.length && (
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Appraisal results</h2>
+          <h2 className="text-base font-semibold">Appraisal results</h2>
           {results.map((r) => {
             const c = r.appraisal_cycles as { name: string; period_from: string; period_to: string; published_at: string | null } | null;
             return (

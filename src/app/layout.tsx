@@ -11,6 +11,8 @@ const poppins = localFont({
   ],
 });
 
+const THEME_SCRIPT = `try{var t=localStorage.getItem("easyd-theme");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}`;
+
 export const metadata: Metadata = {
   title: "Easy D",
   description: "Easy D business management platform",
@@ -18,7 +20,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="en" className={`${poppins.variable} h-full antialiased`} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
       <body className="min-h-full">{children}</body>
     </html>
   );

@@ -13,7 +13,7 @@ export function DraftButton({ run, target, label = "Draft with AI" }: { run: (fo
   const ref = useRef<HTMLButtonElement>(null);
   return (
     <span className="inline-flex flex-wrap items-center gap-2">
-      <button ref={ref} type="button" disabled={pending} className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background disabled:opacity-50"
+      <button ref={ref} type="button" disabled={pending} className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:bg-raised disabled:opacity-50"
         onClick={() => {
           const form = ref.current?.closest("form"); if (!form) return;
           setMsg("");

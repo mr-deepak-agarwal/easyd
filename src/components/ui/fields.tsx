@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-const base = "w-full rounded-md border border-border bg-white px-3 py-2 text-sm outline-none focus:border-brand disabled:bg-background";
+const base = "w-full rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none transition-shadow placeholder:text-muted/70 focus:border-brand disabled:bg-raised disabled:text-muted";
 
 export function Field({ label, htmlFor, hint, children, className }: {
   label: string; htmlFor?: string; hint?: string; children: React.ReactNode; className?: string;

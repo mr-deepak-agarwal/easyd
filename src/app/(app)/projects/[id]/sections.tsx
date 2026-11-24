@@ -18,7 +18,7 @@ import {
 
 type Project = Database["public"]["Tables"]["projects"]["Row"] & { clients: { id: number; firm_name: string | null } | null; leader: { name: string } | null };
 const inr = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
-const h2 = "mb-2 text-sm font-semibold uppercase tracking-wide text-muted";
+const h2 = "mb-2 text-base font-semibold";
 
 async function people() {
   const supabase = await createClient();

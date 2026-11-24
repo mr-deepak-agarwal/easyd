@@ -30,7 +30,7 @@ export default async function ProjectsPage({ searchParams }: PageProps<"/project
       <PageHeader title="Projects" description={MGMT_ROLES.includes(user.role) ? "All projects" : "Projects you are part of"}>
         {FILTERS.map(([k, label]) => (
           <Link key={k} href={`/projects?show=${k}`}
-            className={`rounded-md border px-3 py-1.5 text-sm ${k === show ? "border-brand bg-brand text-white" : "border-border bg-white hover:bg-background"}`}>{label}</Link>
+            className={`rounded-md border px-3 py-1.5 text-sm ${k === show ? "border-brand bg-brand text-white" : "border-border bg-card hover:bg-raised"}`}>{label}</Link>
         ))}
         {MGMT_ROLES.includes(user.role) && <Link href="/projects/new" className="rounded-md bg-brand px-3 py-1.5 text-sm text-white hover:opacity-90">New project</Link>}
       </PageHeader>

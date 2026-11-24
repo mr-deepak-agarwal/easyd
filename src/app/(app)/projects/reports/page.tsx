@@ -50,7 +50,7 @@ function ProjectPicker({ r, projects, project, dates, from, to }: { r: string; p
       <input type="hidden" name="r" value={r} />
       <Select name="project" defaultValue={project || ""} aria-label="Project" className="max-w-sm"><option value="">{dates ? "All projects" : "Choose a project"}</option>{projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</Select>
       {dates && <><Input type="date" name="from" defaultValue={from} aria-label="From" className="w-40" /><Input type="date" name="to" defaultValue={to} aria-label="To" className="w-40" /></>}
-      <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Show</button>
+      <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Show</button>
     </form>
   );
 }
@@ -99,7 +99,7 @@ async function EmployeeEfficiency({ supabase, who, from, to, me }: { supabase: S
         <input type="hidden" name="r" value="employee" />
         <Select name="who" defaultValue={who} aria-label="Employee" className="w-64"><option value="">Choose an employee</option>{people?.map((p) => <option key={p.id} value={p.id}>{p.id === me ? `${p.name} (me)` : p.name}</option>)}</Select>
         <Input type="date" name="from" defaultValue={from} aria-label="From" className="w-40" /><Input type="date" name="to" defaultValue={to} aria-label="To" className="w-40" />
-        <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Show</button>
+        <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Show</button>
       </form>
       {ok && <>
         <p className="text-sm text-muted">Chargeable <b className="text-foreground">{formatMinutes(charge)}</b> · non chargeable <b className="text-foreground">{formatMinutes(nonc)}</b> · {charge + nonc > 0 ? Math.round((charge / (charge + nonc)) * 100) : 0}% chargeable</p>

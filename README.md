@@ -153,6 +153,15 @@ Safety rules built in:
 
 Apply `20261115000016_ai_usage.sql` and `20261115000017_project_risks.sql`.
 
+## Phase 11: New look
+
+- **Shell:** a Discord-style rail of module icons, a panel with that module's pages, and a top bar with search, theme toggle and account menu. On phones the rail and panel open as a drawer.
+- **Command palette:** Ctrl+K (or Cmd+K) jumps to any page you are allowed to open. Typing a question offers "Ask EasyD" with it.
+- **Light and dark theme:** follows the device by default; the moon/sun button remembers a choice per browser. Printing is always light, so invoices print the same as before.
+- **Dashboard:** open tasks, overdue, hours this week (and leave waiting for admin), your next tasks, and links to everything your role can open.
+- **Tasks:** Board view (columns by due date; tick the circle to complete) and List view.
+- **Tokens:** colours live as CSS variables in `src/app/globals.css`. Use `bg-card`, `bg-raised`, `text-muted`, `text-brand`, `bg-warn-soft` and similar rather than fixed colours so both themes work.
+
 ## Run it
 1. Create a Supabase project (region: Mumbai).
 2. Apply the migrations in order (Supabase CLI: `supabase db push`, or paste each file into the SQL editor), then `supabase/seed.sql`.

@@ -9,9 +9,9 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const styles = {
-  primary: "bg-brand text-white hover:opacity-90",
-  secondary: "border border-border bg-white text-foreground hover:bg-background",
-  danger: "bg-danger text-white hover:opacity-90",
+  primary: "bg-brand text-white hover:brightness-110",
+  secondary: "border border-border bg-card text-foreground hover:bg-raised",
+  danger: "bg-red-600 text-white hover:brightness-110",
   ghost: "text-brand hover:bg-brand-soft",
 };
 
@@ -22,7 +22,7 @@ export function SubmitButton({ variant = "primary", confirm, className, children
       type="submit"
       disabled={pending || rest.disabled}
       onClick={(e) => { if (confirm && !window.confirm(confirm)) e.preventDefault(); }}
-      className={cn("rounded-md px-4 py-2 text-sm font-medium disabled:opacity-60", styles[variant], className)}
+      className={cn("rounded-lg px-4 py-2 text-sm font-medium transition active:scale-[.98] disabled:opacity-60", styles[variant], className)}
       {...rest}
     >
       {pending ? "Please wait..." : children}

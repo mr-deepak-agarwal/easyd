@@ -30,7 +30,7 @@ export default async function HolidaysPage({ searchParams }: PageProps<"/hr/holi
       <PageHeader title="Holidays" description={`Company holidays for ${year}`}>
         {[year - 1, year, year + 1].map((y) => (
           <Link key={y} href={`/hr/holidays?year=${y}`}
-            className={`rounded-md border px-3 py-1.5 text-sm ${y === year ? "border-brand bg-brand text-white" : "border-border bg-white hover:bg-background"}`}>{y}</Link>
+            className={`rounded-md border px-3 py-1.5 text-sm ${y === year ? "border-brand bg-brand text-white" : "border-border bg-card hover:bg-raised"}`}>{y}</Link>
         ))}
       </PageHeader>
 

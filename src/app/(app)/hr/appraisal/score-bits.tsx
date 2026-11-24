@@ -1,8 +1,8 @@
 import type { Band } from "@/lib/score";
 
 const TONE: Record<Band, string> = {
-  Excellent: "bg-green-100 text-green-800", Good: "bg-blue-100 text-blue-800",
-  "Needs improvement": "bg-amber-100 text-amber-800", Poor: "bg-red-100 text-red-800",
+  Excellent: "bg-brand-soft text-brand", Good: "bg-info-soft text-info",
+  "Needs improvement": "bg-warn-soft text-warn", Poor: "bg-danger-soft text-danger",
 };
 export function BandBadge({ band }: { band: Band | null }) {
   return band ? <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${TONE[band]}`}>{band}</span> : <span className="text-xs text-muted">Not enough data</span>;

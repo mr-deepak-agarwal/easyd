@@ -31,7 +31,7 @@ export default async function CyclePage({ params }: PageProps<"/hr/appraisal/cyc
   return (
     <div className="space-y-5">
       <PageHeader title={cycle.name} description={`${formatDate(cycle.period_from)} to ${formatDate(cycle.period_to)}`}>
-        <Link href="/hr/appraisal/cycles" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">All cycles</Link>
+        <Link href="/hr/appraisal/cycles" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">All cycles</Link>
         {cycle.status === "open" && <ActionForm action={closeCycle.bind(null, cid)} resetOnSuccess={false}><SubmitButton confirm="Close the cycle? Everyone's score for this period is frozen.">Close cycle and freeze scores</SubmitButton></ActionForm>}
         {cycle.status === "closed" && !locked && <ActionForm action={publishCycle.bind(null, cid)} resetOnSuccess={false}><SubmitButton confirm="Publish to employees? They will see their score, rating and remark.">Publish to employees</SubmitButton></ActionForm>}
         {locked && <Badge tone="green">Published {formatDate(cycle.published_at)}</Badge>}

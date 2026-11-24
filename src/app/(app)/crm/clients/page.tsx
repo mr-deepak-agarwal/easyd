@@ -36,12 +36,12 @@ export default async function ClientsPage({ searchParams }: PageProps<"/crm/clie
       <PageHeader title="Clients" description="Firms, their contacts, leads and follow-ups">
         {FILTERS.map(([k, label]) => (
           <Link key={k} href={`/crm/clients?show=${k}`}
-            className={`rounded-md border px-3 py-1.5 text-sm ${k === filter ? "border-brand bg-brand text-white" : "border-border bg-white hover:bg-background"}`}>{label}</Link>
+            className={`rounded-md border px-3 py-1.5 text-sm ${k === filter ? "border-brand bg-brand text-white" : "border-border bg-card hover:bg-raised"}`}>{label}</Link>
         ))}
       </PageHeader>
 
       <details className="rounded-xl border border-border bg-card p-5">
-        <summary className="cursor-pointer text-sm font-semibold uppercase tracking-wide text-muted">New enquiry (client + lead)</summary>
+        <summary className="cursor-pointer text-base font-semibold">New enquiry (client + lead)</summary>
         <p className="mt-2 text-sm text-muted">If a client with the same firm name already exists, the lead and contact are added to it.</p>
         <ActionForm action={addClientLead} className="mt-4 grid gap-4 sm:grid-cols-2" resetOnSuccess={false}>
           <Field label="Firm name" htmlFor="firm_name"><Input id="firm_name" name="firm_name" required maxLength={200} /></Field>

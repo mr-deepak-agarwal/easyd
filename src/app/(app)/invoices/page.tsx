@@ -33,7 +33,7 @@ export default async function InvoicesPage({ searchParams }: PageProps<"/invoice
   return (
     <div className="space-y-5">
       <PageHeader title="Invoices" description="Proforma, tax and export invoices for all projects">
-        {user.role === "admin" && <Link href="/invoices/sac" className="rounded-md border border-border bg-white px-3 py-2 text-sm hover:bg-background">SAC codes</Link>}
+        {user.role === "admin" && <Link href="/invoices/sac" className="rounded-md border border-border bg-card px-3 py-2 text-sm hover:bg-raised">SAC codes</Link>}
       </PageHeader>
       {canEdit && (
         <form action="/invoices/new" className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-4">
@@ -50,7 +50,7 @@ export default async function InvoicesPage({ searchParams }: PageProps<"/invoice
         <Select name="type" defaultValue={type} aria-label="Type"><option value="">All types</option>{Object.entries(TYPE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</Select>
         <Select name="entity" defaultValue={entity} aria-label="Billed by"><option value="">All entities</option>{Object.values(ENTITIES).map((e) => <option key={e.code} value={e.code}>{e.label}</option>)}</Select>
         <Select name="status" defaultValue={status} aria-label="Payment"><option value="">Any payment</option><option value="paid">Paid</option><option value="unpaid">Unpaid</option></Select>
-        <button className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Filter</button>
+        <button className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Filter</button>
       </form>
       <Table>
         <thead><tr><Th>Invoice no.</Th><Th>Type</Th><Th>Date</Th><Th>Recipient</Th><Th>Project</Th><Th className="text-right">Total</Th><Th>Status</Th></tr></thead>

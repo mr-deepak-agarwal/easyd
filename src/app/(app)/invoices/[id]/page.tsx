@@ -42,7 +42,7 @@ export default async function InvoicePage({ params }: PageProps<"/invoices/[id]"
         <span className="flex-1" />
         {inv.confirmed ? <Badge tone="green">Paid {formatDate(inv.confirmed_at)}{confirmer ? ` · ${confirmer.name}` : ""}</Badge> : <Badge tone="amber">Payment not confirmed</Badge>}
         <PrintButton />
-        {canEdit && !inv.confirmed && <Link href={`/invoices/${invoiceId}/edit`} className="rounded-md border border-border bg-white px-4 py-2 text-sm hover:bg-background">Edit</Link>}
+        {canEdit && !inv.confirmed && <Link href={`/invoices/${invoiceId}/edit`} className="rounded-md border border-border bg-card px-4 py-2 text-sm hover:bg-raised">Edit</Link>}
         {canEdit && type === "Proforma" && !inv.converted && (
           <ActionForm action={convertInvoice.bind(null, invoiceId)} resetOnSuccess={false}><SubmitButton variant="secondary" confirm="Create a tax invoice from this proforma?">Convert to tax invoice</SubmitButton></ActionForm>
         )}
@@ -55,7 +55,7 @@ export default async function InvoicePage({ params }: PageProps<"/invoices/[id]"
       </div>
       {inv.converted && <p className="text-sm text-muted print:hidden">This proforma has been converted to a tax invoice.</p>}
 
-      <article className="mx-auto max-w-[820px] space-y-4 rounded-xl border border-border bg-white p-8 text-sm print:max-w-none print:rounded-none print:border-0 print:p-0" id="invoice">
+      <article className="mx-auto max-w-[820px] space-y-4 rounded-xl border border-border bg-card p-8 text-sm print:max-w-none print:rounded-none print:border-0 print:p-0" id="invoice">
         <header className="flex justify-between gap-4 border-b border-border pb-4">
           <div>
             <h2 className="text-lg font-bold text-brand">{en.name}</h2>

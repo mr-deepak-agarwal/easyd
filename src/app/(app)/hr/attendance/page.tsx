@@ -40,8 +40,8 @@ export default async function AttendancePage({ searchParams }: PageProps<"/hr/at
   return (
     <div className="space-y-5">
       <PageHeader title="Attendance" description={`${MONTH_NAMES[month - 1]} ${year}`}>
-        <Link href={`/hr/attendance?year=${prev.year}&month=${prev.month}`} className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background">Previous</Link>
-        <Link href={`/hr/attendance?year=${next.year}&month=${next.month}`} className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background">Next</Link>
+        <Link href={`/hr/attendance?year=${prev.year}&month=${prev.month}`} className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:bg-raised">Previous</Link>
+        <Link href={`/hr/attendance?year=${next.year}&month=${next.month}`} className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:bg-raised">Next</Link>
       </PageHeader>
 
       {isAdmin && (
@@ -65,7 +65,7 @@ export default async function AttendancePage({ searchParams }: PageProps<"/hr/at
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 min-w-40 border-b border-r border-border bg-background px-3 py-2 text-left font-semibold uppercase tracking-wide text-muted">Employee</th>
+              <th className="sticky left-0 z-10 min-w-40 border-b border-r border-border bg-raised px-3 py-2 text-left font-semibold text-muted">Employee</th>
               {Array.from({ length: days }, (_, i) => (
                 <th key={i} className="min-w-8 border-b border-border bg-background px-1 py-2 text-center font-semibold text-muted">{i + 1}</th>
               ))}
@@ -77,7 +77,7 @@ export default async function AttendancePage({ searchParams }: PageProps<"/hr/at
                 <td className="sticky left-0 z-10 border-b border-r border-border bg-card px-3 py-1.5 font-medium">{p.name}</td>
                 {Array.from({ length: days }, (_, i) => {
                   const s = grid.get(p.id)?.get(i + 1) ?? "";
-                  return <td key={i} className={`border-b border-border px-1 py-1.5 text-center ${/^a/i.test(s) ? "bg-red-50 text-danger" : ""}`}>{s}</td>;
+                  return <td key={i} className={`border-b border-border px-1 py-1.5 text-center ${/^a/i.test(s) ? "bg-danger-soft text-danger" : ""}`}>{s}</td>;
                 })}
               </tr>
             )) : (

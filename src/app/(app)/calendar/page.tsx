@@ -8,8 +8,8 @@ import { PageHeader } from "@/components/ui/page-header";
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
 const STYLE = {
-  holiday: "bg-red-100 text-red-800", leave: "bg-amber-100 text-amber-800", meeting: "bg-blue-100 text-blue-800",
-  project: "bg-brand-soft text-brand", task: "bg-purple-100 text-purple-800", birthday: "bg-pink-100 text-pink-800",
+  holiday: "bg-danger-soft text-danger", leave: "bg-warn-soft text-warn", meeting: "bg-info-soft text-info",
+  project: "bg-brand-soft text-brand", task: "bg-violet-soft text-violet", birthday: "bg-pink-100 text-pink-800",
 } as const;
 const LEGEND = [["holiday", "Holiday"], ["leave", "On leave"], ["meeting", "Meeting"], ["project", "Project start / deadline"], ["task", "Task due"], ["birthday", "Birthday"]] as const;
 
@@ -58,16 +58,16 @@ export default async function CalendarPage({ searchParams }: PageProps<"/calenda
   return (
     <div className="space-y-4">
       <PageHeader title="Calendar" description={`${MONTH_NAMES[month - 1]} ${year}`}>
-        <Link href={`/calendar?m=${monthKey(prev.year, prev.month)}`} className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background">Previous</Link>
-        <Link href="/calendar" className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background">Today</Link>
-        <Link href={`/calendar?m=${monthKey(next.year, next.month)}`} className="rounded-md border border-border bg-white px-3 py-1.5 text-sm hover:bg-background">Next</Link>
+        <Link href={`/calendar?m=${monthKey(prev.year, prev.month)}`} className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:bg-raised">Previous</Link>
+        <Link href="/calendar" className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:bg-raised">Today</Link>
+        <Link href={`/calendar?m=${monthKey(next.year, next.month)}`} className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:bg-raised">Next</Link>
       </PageHeader>
       <ul className="flex flex-wrap gap-2 text-xs">
         {LEGEND.map(([k, label]) => <li key={k} className={`rounded-full px-2.5 py-0.5 ${STYLE[k]}`}>{label}</li>)}
       </ul>
       <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full min-w-[820px] table-fixed border-collapse text-sm">
-          <thead><tr className="bg-background text-xs uppercase tracking-wide text-muted">
+          <thead><tr className="bg-raised text-xs text-muted">
             {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => <th key={d} className="px-2 py-2 text-left font-medium">{d}</th>)}
           </tr></thead>
           <tbody>
