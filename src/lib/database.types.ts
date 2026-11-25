@@ -599,6 +599,20 @@ export type Database = {
           { foreignKeyName: "invoices_project_id_fkey"; columns: ["project_id"]; isOneToOne: false; referencedRelation: "projects"; referencedColumns: ["id"] }
         ]
       }
+      notifications: {
+        Row: { id: number; profile_id: string; kind: string; title: string; body: string | null; href: string | null; actor_id: string | null; dedupe_key: string | null; created_at: string; read_at: string | null; emailed_at: string | null }
+        Insert: { id?: number; profile_id: string; kind: string; title: string; body?: string | null; href?: string | null; actor_id?: string | null; dedupe_key?: string | null; created_at?: string; read_at?: string | null; emailed_at?: string | null }
+        Update: { id?: number; profile_id?: string; kind?: string; title?: string; body?: string | null; href?: string | null; actor_id?: string | null; dedupe_key?: string | null; created_at?: string; read_at?: string | null; emailed_at?: string | null }
+        Relationships: [
+          { foreignKeyName: "notifications_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] }
+        ]
+      }
+      notification_prefs: {
+        Row: { profile_id: string; email_enabled: boolean }
+        Insert: { profile_id: string; email_enabled?: boolean }
+        Update: { profile_id?: string; email_enabled?: boolean }
+        Relationships: []
+      }
       appraisal_cycles: {
         Row: { id: number; name: string; period_from: string; period_to: string; status: string; published_at: string | null; created_by: string | null; created_at: string; closed_at: string | null }
         Insert: { id?: number; name: string; period_from: string; period_to: string; status?: string; published_at?: string | null; created_by?: string | null; created_at?: string; closed_at?: string | null }
@@ -1639,6 +1653,7 @@ export type Database = {
           user_id: string | null
           comment: string
           created_at: string | null
+          mentions: string[]
         }
         Insert: {
           id?: number
@@ -1646,6 +1661,7 @@ export type Database = {
           user_id?: string | null
           comment: string
           created_at?: string | null
+          mentions?: string[]
         }
         Update: {
           id?: number
@@ -1653,6 +1669,7 @@ export type Database = {
           user_id?: string | null
           comment?: string
           created_at?: string | null
+          mentions?: string[]
         }
         Relationships: [
           { foreignKeyName: "task_comments_task_id_fkey"; columns: ["task_id"]; isOneToOne: false; referencedRelation: "tasks"; referencedColumns: ["id"] },
@@ -1839,6 +1856,10 @@ export type Database = {
       log_ai_usage: { Args: { p_feature: string; p_input: number; p_output: number }; Returns: undefined }
       ai_usage_summary: { Args: Record<string, never>; Returns: { total_tokens: number; my_tokens: number }[] }
       report_project_risks: { Args: Record<string, never>; Returns: { project_id: number; project_name: string | null; client_name: string | null; end_date: string | null; status: string; planned_hours: number; logged_minutes: number; progress_pct: number; milestones_open: number; milestones_overdue: number; tasks_open: number; tasks_overdue: number; last_time_entry: string | null; top_overdue_person: string | null; top_overdue_count: number }[] }
+      mark_notification_read: { Args: { p_id: number }; Returns: undefined }
+      mark_all_notifications_read: { Args: Record<string, never>; Returns: undefined }
+      set_email_notifications: { Args: { p_on: boolean }; Returns: undefined }
+      generate_due_notifications: { Args: Record<string, never>; Returns: number }
       submit_review: { Args: { p_profile: string; p_project: number; p_followup: number; p_ownership: number; p_accuracy: number; p_enthusiasm: number; p_detail: number; p_comments: string }; Returns: number }
       set_score_weights: { Args: { p_weights: Json }; Returns: undefined }
       employee_scorecard: { Args: { p_profile: string; p_from: string; p_to: string; p_full_day_minutes?: number }; Returns: { tasks_due: number; tasks_on_time: number; milestones_due: number; milestones_on_time: number; working_days: number; attendance_rows: number; present_days: number; logged_days: number; assigned_minutes: number; unassigned_minutes: number; nonchargeable_minutes: number; idle_projects: number; review_count: number; review_avg: number | null }[] }

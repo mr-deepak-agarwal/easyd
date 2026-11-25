@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { extractMentions } from "@/lib/notify-core";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/session";
 import type { ActionState } from "@/lib/action-state";
@@ -82,7 +83,9 @@ export async function addComment(id: number, _prev: ActionState, formData: FormD
   const comment = z.string().trim().min(1, "Write a comment").max(2000).safeParse(formData.get("comment") ?? "");
   if (!comment.success) return { error: comment.error.issues[0].message };
   const supabase = await createClient();
-  const { error } = await supabase.from("task_comments").insert({ task_id: id, user_id: user.id, comment: comment.data, created_at: new Date().toISOString() });
+  const { data: people } = await supabase.from("profiles").select("id, name").eq("active", true);
+  const mentions = extractMentions(comment.data, people ?? []).filter((m) => m !== user.id);
+  const { error } = await supabase.from("task_comments").insert({ task_id: id, user_id: user.id, comment: comment.data, created_at: new Date().toISOString(), mentions });
   if (error) return { error: "You cannot comment on this task" };
   revalidatePath(`/tasks/${id}`);
   return { ok: "" };

@@ -45,7 +45,7 @@ export default async function TasksPage({ searchParams }: PageProps<"/tasks">) {
           ))}
         </div>
       </PageHeader>
-      <details className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow)]">
+      <details open={one(sp.new) === "1"} className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow)]">
         <summary className="cursor-pointer text-sm font-semibold">New task</summary>
         <ActionForm action={createTask.bind(null, null)} className="mt-4 grid gap-4 sm:grid-cols-2" resetOnSuccess={false}>
           <TaskFields people={people ?? []} />

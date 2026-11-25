@@ -8,6 +8,8 @@ import { ActionForm } from "@/components/ui/action-form";
 import { Field, Textarea } from "@/components/ui/fields";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Badge } from "@/components/ui/badge";
+import { splitMentions } from "@/lib/notify-core";
+import { CommentBox } from "./comment-box";
 import { addComment, setTaskStatus, updateTask } from "../actions";
 import { TaskFields } from "../task-fields";
 
@@ -20,10 +22,16 @@ export default async function TaskPage({ params }: PageProps<"/tasks/[id]">) {
   const [{ data: task }, { data: canEdit }, { data: comments }, { data: people }] = await Promise.all([
     supabase.from("tasks").select("*, projects(id, name), creator:created_by(name), task_participants(profile_id, is_responsible, profiles(name))").eq("id", taskId).maybeSingle(),
     supabase.rpc("can_edit_task", { tid: taskId }),
-    supabase.from("task_comments").select("id, comment, created_at, user_id, profiles:user_id(name)").eq("task_id", taskId).order("id", { ascending: false }),
-    supabase.from("profiles").select("id, name").eq("active", true).order("name"),
+    supabase.from("task_comments").select("id, comment, created_at, user_id, mentions, profiles:user_id(name)").eq("task_id", taskId).order("id", { ascending: false }),
+    supabase.from("profiles").select("id, name, role").eq("active", true).order("name"),
   ]);
   if (!task) notFound();
+  // People who can open this task (and so can be @mentioned usefully): admin, the creator, the people on it, and the project team and managers.
+  const team = task.project_id ? ((await supabase.from("project_team").select("member_id").eq("project_id", task.project_id)).data ?? []).map((m) => m.member_id) : [];
+  const leader = task.project_id ? (await supabase.from("projects").select("leader_id").eq("id", task.project_id).maybeSingle()).data?.leader_id : null;
+  const onTask = new Set([task.created_by, leader, ...team, ...task.task_participants.map((p) => p.profile_id)]);
+  const mentionable = (people ?? []).filter((p) => p.id !== user.id && (p.role === "admin" || onTask.has(p.id) || (!!task.project_id && ["bd", "teamlead", "teamlead2"].includes(p.role))));
+  const nameOf = new Map((people ?? []).map((p) => [p.id, p.name]));
   const done = task.status === "completed";
   const named = (resp: boolean) => task.task_participants.filter((p) => p.is_responsible === resp).map((p) => (p.profiles as { name: string } | null)?.name ?? "Former staff").join(", ") || "-";
   const back = task.projects ? `/projects/${task.projects.id}?tab=tasks` : "/tasks";
@@ -65,17 +73,12 @@ export default async function TaskPage({ params }: PageProps<"/tasks/[id]">) {
 
       <section>
         <h2 className="mb-2 text-base font-semibold">Comments</h2>
-        <Card>
-          <ActionForm action={addComment.bind(null, taskId)} className="grid gap-3">
-            <Field label="Add a comment" htmlFor="comment"><Textarea id="comment" name="comment" required maxLength={2000} /></Field>
-            <div><SubmitButton>Post</SubmitButton></div>
-          </ActionForm>
-        </Card>
+        <Card><CommentBox taskId={taskId} people={mentionable.map(({ id, name }) => ({ id, name }))} /></Card>
         <ul className="mt-3 space-y-3">
           {comments?.length ? comments.map((c) => (
             <li key={c.id} className={`rounded-xl border border-border p-3 text-sm ${c.user_id === user.id ? "bg-brand-soft" : "bg-card"}`}>
               <div className="mb-1 text-xs text-muted">{(c.profiles as { name: string } | null)?.name ?? "Former staff"} · {new Date(c.created_at ?? "").toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" })}</div>
-              <p className="whitespace-pre-wrap">{c.comment}</p>
+              <p className="whitespace-pre-wrap">{splitMentions(c.comment, (c.mentions ?? []).map((m) => nameOf.get(m) ?? "")).map((part, k) => part.mention ? <span key={k} className="rounded bg-brand-soft px-1 font-medium text-brand">{part.text}</span> : <span key={k}>{part.text}</span>)}</p>
             </li>
           )) : <li className="text-sm text-muted">No comments yet</li>}
         </ul>

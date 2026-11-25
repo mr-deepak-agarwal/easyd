@@ -23,8 +23,11 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
 
 export async function requireUser(): Promise<SessionUser> {
   const user = await getSessionUser();
-  if (!user) redirect("/login");
-  return user;
+  if (user) return user;
+  // Signed in but no active profile: show a message instead of bouncing between /login and /dashboard.
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  redirect(auth.user ? "/account-problem" : "/login");
 }
 
 export async function requireRole(allowed: readonly Role[]): Promise<SessionUser> {

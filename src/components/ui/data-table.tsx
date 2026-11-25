@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { EmptyState } from "./empty-state";
 
 export function Table({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
@@ -13,6 +14,6 @@ export function Th({ children, className }: { children?: React.ReactNode; classN
 export function Td({ children, className, colSpan }: { children?: React.ReactNode; className?: string; colSpan?: number }) {
   return <td colSpan={colSpan} className={cn("border-b border-border px-3 py-2.5 align-top", className)}>{children}</td>;
 }
-export function EmptyRow({ cols, text = "Nothing here yet" }: { cols: number; text?: string }) {
-  return <tr><Td colSpan={cols} className="py-10 text-center text-muted">{text}</Td></tr>;
+export function EmptyRow({ cols, text = "Nothing here yet", hint, action }: { cols: number; text?: string; hint?: string; action?: { label: string; href: string } }) {
+  return <tr><Td colSpan={cols} className="!border-b-0"><EmptyState compact title={text} hint={hint} action={action} /></Td></tr>;
 }

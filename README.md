@@ -206,3 +206,29 @@ Appraisal is a score worked out from what each person actually does in the ERP, 
 **Cycles** (`/hr/appraisal/cycles`, admin): create a cycle, close it (scores are frozen), give each employee a final rating 1 to 5 and a remark, publish. Employees see their result only after publishing and can acknowledge it with a comment. A rating is locked once acknowledged.
 
 Apply `supabase/migrations/20261115000012_performance_rules.sql` and `20261115000013_appraisal_cycles.sql`.
+
+## Phase 12 – Notifications, comments and @mentions
+
+- **Bell + page** (`/notifications`): unread count, last 10 in the dropdown, mark read / mark all read.
+- **Created by the database only** (triggers + `_notify`, revoked from the browser): task assigned, comment on your task, @mention, due-date reminders. Duplicates are blocked by a unique key per person.
+- **@mentions**: type `@` in a task comment to pick a teammate. Only people who can open the task are notified.
+- **Daily email digest + due reminders**: Vercel cron calls `GET /api/cron/notify` (see `vercel.json`, 08:00 IST). It needs these environment variables on Vercel:
+  - `CRON_SECRET` – any long random string (Vercel sends it as a Bearer token)
+  - `SUPABASE_SERVICE_ROLE_KEY` – already used for staff management
+  - `RESEND_API_KEY`, `MAIL_FROM` – from a Resend account with a verified sending domain (without these the cron still creates reminders but sends no email)
+  - `NEXT_PUBLIC_SITE_URL` – e.g. `https://easyd.vercel.app`, used for links in emails
+- Each person can opt out of email in Notifications settings; in-app notifications stay.
+- **Run migration 18** (`…_notifications.sql`), or use the regenerated `easyd-supabase-all.sql`.
+- **Fix:** a signed-in user with no active profile now lands on `/account-problem` instead of looping on `/login`.
+- If your copy still has a `proxy.ts` in the project root (outside `src/`), delete it; the one in `src/` is the real one.
+
+## Phase 13 – UI polish
+
+- **Loading states:** every page shows a page-shaped skeleton while it loads (tasks has a board skeleton). Empty lists explain what belongs there and offer the next step (`EmptyState`, also used by `EmptyRow`).
+- **Toasts with Undo:** `useToast()` from `components/ui/toast.tsx`. Ticking a task on the board removes the card at once, shows "marked done · Undo", and Undo puts it back.
+- **Keyboard:** `Ctrl K` or `/` search, `C` new task, `?` shortcut list, `G` then `D/T/L/P/C/I/A/N` to jump (only pages your role can open). Shortcuts pause while typing and while a dialog is open.
+- **Search finds records:** the palette searches tasks, projects, clients, leads and invoices by name as you type. It runs as the signed-in user, so row security decides what each person sees.
+- **Dashboard:** welcome tips on first visit (dismissed per browser), recent activity from notifications, "Projects to approve" for managers.
+- **Accessibility:** skip-to-content link, muted text raised to AA contrast in light mode, dark-mode brand fill darkened so white text passes AA, reduced-motion respected, toasts announced to screen readers.
+- **Installable app:** web manifest, icons (192, 512, maskable, Apple touch), theme colour. On a phone choose "Add to Home Screen"; on desktop Chrome use the install icon. The manifest is public (the proxy allows `/manifest.webmanifest`).
+- No database changes in this phase.

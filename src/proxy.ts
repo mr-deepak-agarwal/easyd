@@ -1,7 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = ["/login", "/privacy"];
+// The manifest is fetched without cookies, so it must be public. /api/cron checks its own secret; /account-problem is where a login with no profile lands (no redirect loop).
+const PUBLIC_PATHS = ["/login", "/privacy", "/account-problem", "/api/cron", "/manifest.webmanifest"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });

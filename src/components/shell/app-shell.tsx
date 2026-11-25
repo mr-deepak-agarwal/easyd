@@ -2,27 +2,32 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { LogOut, Menu, Search, UserRound, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Keyboard, LogOut, Menu, Search, UserRound, X } from "lucide-react";
 import type { NavGroup } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { iconFor } from "./icons";
 import { CommandPalette } from "./command-palette";
 import { ThemeToggle } from "./theme-toggle";
+import { NotificationBell } from "./notification-bell";
+import { ShortcutHelp, useShortcuts } from "./shortcuts";
 
-type Props = { groups: NavGroup[]; user: { name: string; empid: string; roleLabel: string }; logout: () => Promise<void>; children: React.ReactNode };
+type Props = { unread: number; groups: NavGroup[]; user: { name: string; empid: string; roleLabel: string }; logout: () => Promise<void>; children: React.ReactNode };
 
 const initials = (n: string) => n.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]!.toUpperCase()).join("") || "?";
 const matches = (path: string, href: string) => path === href || (href !== "/dashboard" && path.startsWith(href + "/"));
 
-export function AppShell({ groups, user, logout, children }: Props) {
+export function AppShell({ unread, groups, user, logout, children }: Props) {
   const path = usePathname();
   // The most specific link wins, so /projects/profitability does not also light up /projects.
   const best = useMemo(() => groups.flatMap((g) => g.items).filter((i) => matches(path, i.href)).sort((a, b) => b.href.length - a.href.length)[0]?.href, [groups, path]);
   const isActive = (_p: string, href: string) => href === best;
   const owner = useMemo(() => groups.find((g) => g.items.some((i) => i.href === best))?.label ?? groups[0]?.label, [groups, best]);
   const [picked, setPicked] = useState<string | null>(null);
-  const [drawer, setDrawer] = useState(false), [palette, setPalette] = useState(false);
+  const [drawer, setDrawer] = useState(false), [palette, setPalette] = useState(false), [help, setHelp] = useState(false);
+  const allowed = useMemo(() => new Set(groups.flatMap((g) => g.items.map((i) => i.href))), [groups]);
+  const openPalette = useCallback(() => setPalette(true), []), openHelp = useCallback(() => setHelp(true), []);
+  useShortcuts({ allowed, openPalette, openHelp });
   const shown = groups.find((g) => g.label === (picked ?? owner)) ?? groups[0];
 
   const [seenPath, setSeenPath] = useState(path);
@@ -69,6 +74,7 @@ export function AppShell({ groups, user, logout, children }: Props) {
 
   return (
     <div className="flex h-screen print:block print:h-auto">
+      <a href="#main" className="skip-link">Skip to content</a>
       <div className="hidden md:flex print:hidden">{rail}{panel}</div>
       {drawer && (
         <div className="fixed inset-0 z-40 flex md:hidden print:hidden" onMouseDown={(e) => { if (e.target === e.currentTarget) setDrawer(false); }}>
@@ -83,20 +89,23 @@ export function AppShell({ groups, user, logout, children }: Props) {
             <kbd className="ml-auto hidden rounded border border-border bg-card px-1.5 py-0.5 text-[11px] sm:block">Ctrl K</kbd>
           </button>
           <div className="ml-auto flex items-center gap-1">
+            <NotificationBell initial={unread} />
             <ThemeToggle />
             <details className="group relative">
               <summary aria-label="Account menu" className="grid size-9 cursor-pointer list-none place-items-center rounded-full bg-brand text-xs font-semibold text-white ring-offset-2 ring-offset-card transition hover:ring-2 hover:ring-brand [&::-webkit-details-marker]:hidden">{initials(user.name)}</summary>
               <div className="absolute right-0 z-30 mt-2 w-64 rounded-xl border border-border bg-card p-2 shadow-2xl">
                 <div className="px-3 py-2"><p className="truncate text-sm font-medium">{user.name}</p><p className="text-xs text-muted">{user.empid} · {user.roleLabel}</p></div>
                 <div className="my-1 h-px bg-border" />
+                <button type="button" onClick={() => setHelp(true)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-raised"><Keyboard className="size-4 text-muted" aria-hidden />Keyboard shortcuts</button>
                 <Link href="/profile" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-raised"><UserRound className="size-4 text-muted" aria-hidden />My account</Link>
                 <form action={logout}><button type="submit" className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-raised"><LogOut className="size-4 text-muted" aria-hidden />Log out</button></form>
               </div>
             </details>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 print:overflow-visible print:p-0"><div className="mx-auto w-full max-w-[1400px]">{children}</div></main>
+        <main id="main" tabIndex={-1} className="flex-1 overflow-y-auto outline-none p-4 sm:p-6 print:overflow-visible print:p-0"><div className="mx-auto w-full max-w-[1400px]">{children}</div></main>
       </div>
+      {help && <ShortcutHelp allowed={allowed} onClose={() => setHelp(false)} />}
       {palette && <CommandPalette groups={groups} onClose={() => setPalette(false)} />}
       {drawer && <button type="button" aria-label="Close menu" onClick={() => setDrawer(false)} className="fixed left-[322px] top-3 z-50 grid size-9 place-items-center rounded-full bg-card text-foreground shadow md:hidden"><X className="size-5" /></button>}
     </div>

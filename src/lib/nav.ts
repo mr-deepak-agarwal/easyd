@@ -9,7 +9,7 @@ const ADMIN: readonly Role[] = ["admin"];
 
 // Mirrors the role rules of the old sidebar.php, now in one typed place.
 export const NAV: NavGroup[] = [
-  { label: "Home", items: [{ label: "Dashboard", href: "/dashboard", roles: ALL }, { label: "Ask EasyD", href: "/ask", roles: ALL }] },
+  { label: "Home", items: [{ label: "Dashboard", href: "/dashboard", roles: ALL }, { label: "Ask EasyD", href: "/ask", roles: ALL }, { label: "Notifications", href: "/notifications", roles: ALL }] },
   {
     label: "HR",
     items: [

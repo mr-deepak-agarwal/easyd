@@ -334,3 +334,40 @@ describe("risk rules", () => {
     expect(a.flags.map((f) => f.level)).toEqual(["high", "low"]);
   });
 });
+
+import { extractMentions, splitMentions, timeAgo, buildDigest } from "../src/lib/notify-core";
+describe("mentions and notifications", () => {
+  const people = [{ id: "1", name: "Emp One" }, { id: "2", name: "Emp Two" }, { id: "3", name: "Priya Nair" }, { id: "4", name: "Priya Nair Rao" }];
+  it("finds exact full-name mentions, any case, once each", () => {
+    expect(extractMentions("hi @emp one and @Emp One, plus @Priya Nair", people)).toEqual(["1", "3"]);
+  });
+  it("prefers the longer name and ignores partial names, emails and no-@ names", () => {
+    expect(extractMentions("ask @Priya Nair Rao", people)).toEqual(["4"]);
+    expect(extractMentions("mail me at x@Emp One.com or say Emp Two", people)).toEqual([]);
+    expect(extractMentions("@Emp", people)).toEqual([]);
+    expect(extractMentions("@Emp Onerous", people)).toEqual([]);
+  });
+  it("caps the number of mentions", () => {
+    const many = Array.from({ length: 20 }, (_, i) => ({ id: String(i), name: `P${i}x` }));
+    expect(extractMentions(many.map((p) => "@" + p.name).join(" "), many, 5)).toHaveLength(5);
+  });
+  it("splits text into plain and mention parts", () => {
+    expect(splitMentions("Hi @Emp One, see this", ["Emp One"])).toEqual([{ text: "Hi ", mention: false }, { text: "@Emp One", mention: true }, { text: ", see this", mention: false }]);
+    expect(splitMentions("no names", ["Emp One"])).toEqual([{ text: "no names", mention: false }]);
+    expect(splitMentions("a@Emp One", ["Emp One"])).toEqual([{ text: "a@Emp One", mention: false }]);
+  });
+  it("words time simply", () => {
+    const now = Date.parse("2026-11-24T10:00:00Z");
+    expect(timeAgo("2026-11-24T09:59:40Z", now)).toBe("just now");
+    expect(timeAgo("2026-11-24T09:15:00Z", now)).toBe("45 min ago");
+    expect(timeAgo("2026-11-24T05:00:00Z", now)).toBe("5 h ago");
+    expect(timeAgo("2026-11-23T06:00:00Z", now)).toBe("yesterday");
+  });
+  it("builds a digest and escapes what people typed", () => {
+    const d = buildDigest("Emp One", [{ title: "Due today", body: "<script>x</script>", href: "/tasks/5" }, { title: "Mentioned", body: null, href: null }], "https://easyd.vercel.app/");
+    expect(d.subject).toBe("Easy D: 2 things need your attention");
+    expect(d.html).toContain("&lt;script&gt;"); expect(d.html).not.toContain("<script>");
+    expect(d.html).toContain("https://easyd.vercel.app/tasks/5"); expect(d.text).toContain("Hi Emp,");
+    expect(buildDigest("A", [{ title: "One thing", body: null, href: null }], "https://x").subject).toBe("Easy D: One thing");
+  });
+});
