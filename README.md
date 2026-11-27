@@ -232,3 +232,13 @@ Apply `supabase/migrations/20261115000012_performance_rules.sql` and `2026111500
 - **Accessibility:** skip-to-content link, muted text raised to AA contrast in light mode, dark-mode brand fill darkened so white text passes AA, reduced-motion respected, toasts announced to screen readers.
 - **Installable app:** web manifest, icons (192, 512, maskable, Apple touch), theme colour. On a phone choose "Add to Home Screen"; on desktop Chrome use the install icon. The manifest is public (the proxy allows `/manifest.webmanifest`).
 - No database changes in this phase.
+
+## Phase 14 – Task power-up (migration 20)
+
+- **Stages:** open tasks are To do, In progress or In review; completing moves them to Done. `status` is unchanged (created/completed), so scoring, risk and reminder queries are untouched. The first time a task goes In progress its start time is saved.
+- **Board:** grouped by stage (default) or by due date. Drag a card between columns, or use the "Move to" list on the card (keyboard friendly). Every move shows "Undo". Finished work from the last 14 days shows under Done.
+- **Dependencies:** on a task page, "Waiting for" lists tasks that must finish first. A task cannot be completed while one is open (enforced in the database, so every route is covered). Loops are refused. When the last blocker finishes, the people waiting are notified ("Ready to start").
+- **Repeating tasks:** Repeat every day, week or month, optionally until a date (a due date is required). Completing one creates the next, due after today, with the same people. Undo then complete again never makes a second copy. Repeats do not send a new "someone gave you a task" notification.
+- **Timeline:** eight-week view of dated tasks with dependency arrows, a today marker, weekends shaded and Earlier / Today / Later navigation.
+- **Filters and saved views:** search, mine/everyone, due date, project. Filters live in the address bar, so they can be shared. "Save view" keeps the current filters under a name, per person (up to 40 characters, one per name).
+- **Run migration 20** (`…_task_powerup.sql`) or use the regenerated `easyd-supabase-all.sql`. The migration kit's `02-schema.sql` already includes it.

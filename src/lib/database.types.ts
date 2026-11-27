@@ -1697,6 +1697,21 @@ export type Database = {
           { foreignKeyName: "task_participants_task_id_fkey"; columns: ["task_id"]; isOneToOne: false; referencedRelation: "tasks"; referencedColumns: ["id"] }
         ]
       }
+      task_dependencies: {
+        Row: { task_id: number; depends_on_id: number; created_by: string | null; created_at: string }
+        Insert: { task_id: number; depends_on_id: number; created_by?: string | null; created_at?: string }
+        Update: { task_id?: number; depends_on_id?: number; created_by?: string | null; created_at?: string }
+        Relationships: [
+          { foreignKeyName: "task_dependencies_task_id_fkey"; columns: ["task_id"]; isOneToOne: false; referencedRelation: "tasks"; referencedColumns: ["id"] },
+          { foreignKeyName: "task_dependencies_depends_on_id_fkey"; columns: ["depends_on_id"]; isOneToOne: false; referencedRelation: "tasks"; referencedColumns: ["id"] }
+        ]
+      }
+      saved_views: {
+        Row: { id: number; profile_id: string; scope: string; name: string; query: string; created_at: string }
+        Insert: { id?: number; profile_id?: string; scope?: string; name: string; query: string; created_at?: string }
+        Update: { id?: number; profile_id?: string; scope?: string; name?: string; query?: string; created_at?: string }
+        Relationships: []
+      }
       tasks: {
         Row: {
           id: number
@@ -1711,6 +1726,11 @@ export type Database = {
           completed_at: string | null
           edited_by: string | null
           edited_at: string | null
+          stage: string
+          started_at: string | null
+          repeat_rule: string | null
+          repeat_until: string | null
+          recurs_from_id: number | null
         }
         Insert: {
           id?: number
@@ -1725,6 +1745,11 @@ export type Database = {
           completed_at?: string | null
           edited_by?: string | null
           edited_at?: string | null
+          stage?: string
+          started_at?: string | null
+          repeat_rule?: string | null
+          repeat_until?: string | null
+          recurs_from_id?: number | null
         }
         Update: {
           id?: number
@@ -1739,6 +1764,11 @@ export type Database = {
           completed_at?: string | null
           edited_by?: string | null
           edited_at?: string | null
+          stage?: string
+          started_at?: string | null
+          repeat_rule?: string | null
+          repeat_until?: string | null
+          recurs_from_id?: number | null
         }
         Relationships: [
           { foreignKeyName: "tasks_created_by_fkey"; columns: ["created_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
@@ -1856,6 +1886,8 @@ export type Database = {
       log_ai_usage: { Args: { p_feature: string; p_input: number; p_output: number }; Returns: undefined }
       ai_usage_summary: { Args: Record<string, never>; Returns: { total_tokens: number; my_tokens: number }[] }
       report_project_risks: { Args: Record<string, never>; Returns: { project_id: number; project_name: string | null; client_name: string | null; end_date: string | null; status: string; planned_hours: number; logged_minutes: number; progress_pct: number; milestones_open: number; milestones_overdue: number; tasks_open: number; tasks_overdue: number; last_time_entry: string | null; top_overdue_person: string | null; top_overdue_count: number }[] }
+      add_task_dependency: { Args: { p_task: number; p_blocker: number }; Returns: undefined }
+      remove_task_dependency: { Args: { p_task: number; p_blocker: number }; Returns: undefined }
       mark_notification_read: { Args: { p_id: number }; Returns: undefined }
       mark_all_notifications_read: { Args: Record<string, never>; Returns: undefined }
       set_email_notifications: { Args: { p_on: boolean }; Returns: undefined }
